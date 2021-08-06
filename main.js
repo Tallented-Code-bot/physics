@@ -10,6 +10,10 @@ function Ball(x,y,radius){
 	this.x=x;
 	this.y=y;
 	this.radius=radius;
+	this.vel_x=0
+	this.vel_y=0;
+	this.acc_x=0;
+	this.acc_y=0;
 	balls.push(this);
 }
 
@@ -24,11 +28,24 @@ Ball.prototype.draw=function(){
 }
 
 
-Ball.prototype.keyControl=function(){
-	if(LEFT)this.x--;
-	if(RIGHT)this.x++;
-	if(UP)this.y--;
-	if(DOWN)this.y++;
+Ball.prototype.keyControl=function(){//if the arrow keys are pressed
+	//set the value of the acceleration
+	if(LEFT)this.acc_x=-1;
+	if(RIGHT)this.acc_x=1;
+	if(UP)this.acc_y=-1;
+	if(DOWN)this.acc_y=1;
+	if(!UP&&!DOWN)this.acc_y=0;
+	if(!LEFT&&!RIGHT)this.acc_x=0;
+	//set the velocity from the acceleration
+	this.vel_x+=this.acc_x;
+	this.vel_y+=this.acc_y;
+	//add friction
+	this.vel_x*=0.9;
+	this.vel_y*=0.9;
+	//set the position from the velocity
+	this.x+=this.vel_x;
+	this.y+=this.vel_y;
+
 }
 
 
