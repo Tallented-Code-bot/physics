@@ -7,20 +7,17 @@ let LEFT,RIGHT,UP,DOWN;
 
 
 function Ball(x,y,radius){
-	this.x=x;
-	this.y=y;
+	this.position=new Vector(x,y);
+	this.velocity=new Vector(0,0);
+	this.acceleration=new Vector(0,0);
 	this.radius=radius;
-	this.vel_x=0
-	this.vel_y=0;
-	this.acc_x=0;
-	this.acc_y=0;
 	balls.push(this);
 }
 
 
 Ball.prototype.draw=function(){
 	context.beginPath();
-	context.arc(this.x,this.y,this.radius,0,2*Math.PI);
+	context.arc(this.position.x,this.position.y,this.radius,0,2*Math.PI);
 	context.strokeStyle="black";
 	context.fillStyle="red";
 	context.stroke();
@@ -30,21 +27,18 @@ Ball.prototype.draw=function(){
 
 Ball.prototype.keyControl=function(){//if the arrow keys are pressed
 	//set the value of the acceleration
-	if(LEFT)this.acc_x=-1;
-	if(RIGHT)this.acc_x=1;
-	if(UP)this.acc_y=-1;
-	if(DOWN)this.acc_y=1;
-	if(!UP&&!DOWN)this.acc_y=0;
-	if(!LEFT&&!RIGHT)this.acc_x=0;
+	if(LEFT)this.acceleration.x=-1;
+	if(RIGHT)this.acceleration.x=1;
+	if(UP)this.acceleration.y=-1;
+	if(DOWN)this.acceleration.y=1;
+	if(!UP&&!DOWN)this.acceleration.y=0;
+	if(!LEFT&&!RIGHT)this.acceleration.x=0;
 	//set the velocity from the acceleration
-	this.vel_x+=this.acc_x;
-	this.vel_y+=this.acc_y;
+	this.velocity=this.velocity.add(this.acceleration);
 	//add friction
-	this.vel_x*=0.9;
-	this.vel_y*=0.9;
+	this.velocity=this.velocity.mult(0.9);
 	//set the position from the velocity
-	this.x+=this.vel_x;
-	this.y+=this.vel_y;
+	this.position=this.position.add(this.velocity);
 
 }
 
