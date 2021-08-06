@@ -33,6 +33,7 @@ Ball.prototype.keyControl=function(){//if the arrow keys are pressed
 	if(DOWN)this.acceleration.y=1;
 	if(!UP&&!DOWN)this.acceleration.y=0;
 	if(!LEFT&&!RIGHT)this.acceleration.x=0;
+	this.acceleration=this.acceleration.unit();//set the acceleration to have a magnitude of 1
 	//set the velocity from the acceleration
 	this.velocity=this.velocity.add(this.acceleration);
 	//add friction
