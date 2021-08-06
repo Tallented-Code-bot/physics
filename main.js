@@ -64,6 +64,18 @@ function resolvePenetrationFor2Balls(b1,b2){
 }
 
 
+
+function resolveCollisionFor2Balls(b1,b2){
+	let normal=b1.position.sub(b2.position).unit();
+	let relativeVelocity=b1.velocity.sub(b2.velocity);
+	let separatingVelocity=Vector.dot(relativeVelocity,normal);
+	let new_separatingVelocity=-separatingVelocity;
+	let separatingVelocityVector=normal.mult(new_separatingVelocity)
+
+	b1.velocity=b1.velocity.add(separatingVelocityVector);
+	b2.velocity=b2.velocity.add(separatingVelocityVector.mult(-1));
+}
+
 window.addEventListener("keydown",function(event){//listen for keys being pressed
 	event.preventDefault();//prevent the browser from scrolling
 	//set the direction variables based on keypresses
@@ -102,6 +114,7 @@ function loop(){
 		for(let i=index+1;i<balls.length;i++){
 			if(are2BallsColliding(balls[index],balls[i])){
 				resolvePenetrationFor2Balls(balls[index],balls[i]);
+				resolveCollisionFor2Balls(balls[index],balls[i]);
 			}
 		}	
 	})
