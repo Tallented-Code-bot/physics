@@ -44,6 +44,24 @@ Ball.prototype.keyControl=function(){//if the arrow keys are pressed
 }
 
 
+function are2BallsColliding(b1,b2){
+	if(b1.radius+b2.radius>=b2.position.sub(b1.position).mag()){
+		//if the distance between the balls is smaller than the sum of the radii, they are colliding
+		return true;
+	}
+	return false;
+}
+
+
+function resolvePenetrationFor2Balls(b1,b2){
+	let distance=b1.position.sub(b2.position);
+	let penetration_depth=b1.radius+b2.radius-distance.mag();
+	let penetration_resolution=distance.unit().mult(penetration_depth/2);
+	b1.position=b1.position.add(penetration_resolution);
+	b2.position=b2.position.add(penetration_resolution.mult(-1));
+}
+
+
 window.addEventListener("keydown",function(event){//listen for keys being pressed
 	event.preventDefault();//prevent the browser from scrolling
 	//set the direction variables based on keypresses
@@ -70,13 +88,23 @@ window.addEventListener("keyup",function(event){//listen for keys being released
 })
 
 let ball1=new Ball(100,100,25);
+let ball2=new Ball(200,200,50);
+let ball3=new Ball(300,300,10);
 function loop(){
 	context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
 	ball1.keyControl();
 	ball1.draw();
-	balls.forEach((b)=>{
+	balls.forEach((b,index)=>{
 		b.draw();
+		for(let i=index+1;i<balls.length;i++){
+			if(are2BallsColliding(balls[index],balls[i])){
+				resolvePenetrationFor2Balls(balls[index],balls[i]);
+			}
+		}	
 	})
+	if(are2BallsColliding(ball1,ball2)){
+		resolvePenetrationFor2Balls(ball1,ball2);		
+	}	
 	window.requestAnimationFrame(loop);
 }
 window.requestAnimationFrame(loop);
