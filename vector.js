@@ -38,3 +38,16 @@ Vector.prototype.unit=function(){
 		this.y/this.mag()
 	);
 }
+
+
+Vector.prototype.normal=function(){
+	return new Vector(
+		-this.y,
+		this.x
+	).unit();
+}
+
+
+Vector.dot=function(vector1,vector2){
+	return vector1.x*vector2.x+vector1.y*vector2.y;
+}
