@@ -51,6 +51,10 @@ window.addEventListener("keydown",function(event){//listen for keys being presse
 	if(event.keyCode===38)UP=true;
 	if(event.keyCode===39)RIGHT=true;
 	if(event.keyCode===40)DOWN=true;
+	if(event.keyCode===65)LEFT=true;
+	if(event.keyCode===68)RIGHT=true;
+	if(event.keyCode===87)UP=true;
+	if(event.keyCode===83)DOWN=true;
 })
 
 window.addEventListener("keyup",function(event){//listen for keys being released
@@ -59,6 +63,10 @@ window.addEventListener("keyup",function(event){//listen for keys being released
 	if(event.keyCode===38)UP=false;
 	if(event.keyCode===39)RIGHT=false;
 	if(event.keyCode===40)DOWN=false;
+	if(event.keyCode===65)LEFT=false;
+	if(event.keyCode===68)RIGHT=false;
+	if(event.keyCode===87)UP=false;
+	if(event.keyCode===83)DOWN=false;
 })
 
 let ball1=new Ball(100,100,25);
