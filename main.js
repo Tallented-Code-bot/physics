@@ -1,6 +1,8 @@
 const canvas=document.getElementById("canvas");//get the canvas element
 const context=canvas.getContext("2d");//get the canvas drawing context so that we can draw
 
+const balls=[];
+
 let LEFT,RIGHT,UP,DOWN;
 
 
@@ -8,6 +10,7 @@ function Ball(x,y,radius){
 	this.x=x;
 	this.y=y;
 	this.radius=radius;
+	balls.push(this);
 }
 
 
@@ -51,6 +54,9 @@ function loop(){
 	context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
 	ball1.keyControl();
 	ball1.draw();
+	balls.forEach((b)=>{
+		b.draw();
+	})
 	window.requestAnimationFrame(loop);
 }
 window.requestAnimationFrame(loop);
