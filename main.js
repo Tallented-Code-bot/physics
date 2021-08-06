@@ -5,12 +5,20 @@ const balls=[];
 
 let LEFT,RIGHT,UP,DOWN;
 
+let friction=0.1;
+let elasticity=1;
 
-function Ball(x,y,radius){
+function Ball(x,y,radius,mass){
 	this.position=new Vector(x,y);
 	this.velocity=new Vector(0,0);
 	this.acceleration=new Vector(0,0);
 	this.radius=radius;
+	this.mass=mass;
+	if(mass===0){
+		this.inverseMass=0;
+	}else{
+		this.inverseMass=1/this.mass;
+	}
 	balls.push(this);
 }
 
@@ -40,7 +48,7 @@ Ball.prototype.move=function(){
 	//set the velocity from the acceleration
 	this.velocity=this.velocity.add(this.acceleration);
 	//add friction
-	this.velocity=this.velocity.mult(0.9);
+	this.velocity=this.velocity.mult(1-friction);
 	//set the position from the velocity
 	this.position=this.position.add(this.velocity);
 }
@@ -69,11 +77,14 @@ function resolveCollisionFor2Balls(b1,b2){
 	let normal=b1.position.sub(b2.position).unit();
 	let relativeVelocity=b1.velocity.sub(b2.velocity);
 	let separatingVelocity=Vector.dot(relativeVelocity,normal);
-	let new_separatingVelocity=-separatingVelocity;
-	let separatingVelocityVector=normal.mult(new_separatingVelocity)
+	let new_separatingVelocity=-separatingVelocity*elasticity;
 
-	b1.velocity=b1.velocity.add(separatingVelocityVector);
-	b2.velocity=b2.velocity.add(separatingVelocityVector.mult(-1));
+	let vsep_diff=new_separatingVelocity-separatingVelocity;
+	let impulse=vsep_diff/(b1.inverseMass+b2.inverseMass);
+	let impulseVector=normal.mult(impulse);
+
+	b1.velocity=b1.velocity.add(impulseVector.mult(b1.inverseMass));
+	b2.velocity=b2.velocity.add(impulseVector.mult(-b2.inverseMass));
 }
 
 window.addEventListener("keydown",function(event){//listen for keys being pressed
@@ -101,9 +112,9 @@ window.addEventListener("keyup",function(event){//listen for keys being released
 	if(event.keyCode===83)DOWN=false;
 })
 
-let ball1=new Ball(100,100,25);
-let ball2=new Ball(200,200,50);
-let ball3=new Ball(300,300,10);
+let ball1=new Ball(100,100,25,5);
+let ball2=new Ball(200,200,50,50);
+let ball3=new Ball(300,300,10,2);
 function loop(){
 	context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
 	ball1.keyControl();
