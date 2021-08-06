@@ -33,6 +33,9 @@ Ball.prototype.keyControl=function(){//if the arrow keys are pressed
 	if(DOWN)this.acceleration.y=1;
 	if(!UP&&!DOWN)this.acceleration.y=0;
 	if(!LEFT&&!RIGHT)this.acceleration.x=0;
+}
+
+Ball.prototype.move=function(){
 	this.acceleration=this.acceleration.unit();//set the acceleration to have a magnitude of 1
 	//set the velocity from the acceleration
 	this.velocity=this.velocity.add(this.acceleration);
@@ -40,7 +43,6 @@ Ball.prototype.keyControl=function(){//if the arrow keys are pressed
 	this.velocity=this.velocity.mult(0.9);
 	//set the position from the velocity
 	this.position=this.position.add(this.velocity);
-
 }
 
 
@@ -95,6 +97,7 @@ function loop(){
 	ball1.keyControl();
 	ball1.draw();
 	balls.forEach((b,index)=>{
+		b.move();
 		b.draw();
 		for(let i=index+1;i<balls.length;i++){
 			if(are2BallsColliding(balls[index],balls[i])){
