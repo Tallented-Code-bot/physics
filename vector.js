@@ -30,3 +30,11 @@ Vector.prototype.mult=function(number){
 		this.y*number
 	);
 }
+
+Vector.prototype.unit=function(){
+	if(this.mag()===0)return new Vector(0,0);//this prevents division by 0
+	return new Vector(
+		this.x/this.mag(),
+		this.y/this.mag()
+	);
+}
