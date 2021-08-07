@@ -4,7 +4,6 @@ const context=canvas.getContext("2d");//get the canvas drawing context so that w
 const balls=[];
 const walls=[];
 
-let LEFT,RIGHT,UP,DOWN;
 
 let friction=0.05;
 let elasticity=1;
@@ -136,33 +135,6 @@ function rotationMatrix(angle){
 	matrix.data[1][1]=Math.cos(angle);
 	return matrix;
 }
-
-window.addEventListener("keydown",function(event){//listen for keys being pressed
-	event.preventDefault();//prevent the browser from scrolling
-	//set the direction variables based on keypresses
-	if(event.keyCode===37)LEFT=true;
-	if(event.keyCode===38)UP=true;
-	if(event.keyCode===39)RIGHT=true;
-	if(event.keyCode===40)DOWN=true;
-	if(event.keyCode===65)LEFT=true;
-	if(event.keyCode===68)RIGHT=true;
-	if(event.keyCode===87)UP=true;
-	if(event.keyCode===83)DOWN=true;
-})
-
-window.addEventListener("keyup",function(event){//listen for keys being released
-	//and unset the direction variables based on keypresses
-	if(event.keyCode===37)LEFT=false;
-	if(event.keyCode===38)UP=false;
-	if(event.keyCode===39)RIGHT=false;
-	if(event.keyCode===40)DOWN=false;
-	if(event.keyCode===65)LEFT=false;
-	if(event.keyCode===68)RIGHT=false;
-	if(event.keyCode===87)UP=false;
-	if(event.keyCode===83)DOWN=false;
-})
-
-
 
 
 let ball1=new Ball(100,100,25,10);
