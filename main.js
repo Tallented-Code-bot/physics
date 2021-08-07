@@ -62,6 +62,7 @@ Ball.prototype.move=function(){
 	this.acceleration=this.acceleration.unit();//set the acceleration to have a magnitude of 1
 	//set the velocity from the acceleration
 	this.velocity=this.velocity.add(this.acceleration);
+	this.acceleration.y=1
 	//add friction
 	this.velocity=this.velocity.mult(1-friction);
 	//set the position from the velocity
@@ -232,8 +233,12 @@ window.addEventListener("keyup",function(event){//listen for keys being released
 	if(event.keyCode===83)DOWN=false;
 })
 
-let ball1=new Ball(100,100,25,5);
-let ball2=new Ball(200,200,50,50);
+
+
+
+
+let ball1=new Ball(100,100,25,10);
+let ball2=new Ball(200,200,50,2);
 let ball3=new Ball(300,300,10,2);
 let wall1=new Wall(400,100,450,350);
 let wall2=new Wall(200,100,150,350);
@@ -244,7 +249,6 @@ let topEdge=new Wall(0,0,context.canvas.width,0);
 let bottomEdge=new Wall(0,context.canvas.height,context.canvas.width,context.canvas.height);
 function loop(){
 	context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
-	ball1.keyControl();
 	balls.forEach((b,index)=>{
 		b.move();
 		walls.forEach((w)=>{
