@@ -50,7 +50,6 @@ Ball.prototype.move=function(){
 	this.acceleration=this.acceleration.unit();//set the acceleration to have a magnitude of 1
 	//set the velocity from the acceleration
 	this.velocity=this.velocity.add(this.acceleration);
-	this.acceleration.y=1
 	//add friction
 	this.velocity=this.velocity.mult(1-friction);
 	//set the position from the velocity
