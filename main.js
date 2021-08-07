@@ -233,13 +233,17 @@ window.addEventListener("keyup",function(event){//listen for keys being released
 	if(event.keyCode===83)DOWN=false;
 })
 
-
+canvas.addEventListener("click",function(event){
+	let rect=canvas.getBoundingClientRect();
+	let x=event.clientX-rect.left;
+	let y=event.clientY-rect.top;
+	new Ball(x,y,20,2);
+})
 
 
 
 let ball1=new Ball(100,100,25,10);
 let ball2=new Ball(200,200,50,2);
-let ball3=new Ball(300,300,10,2);
 let wall1=new Wall(400,100,450,350);
 let wall2=new Wall(200,100,150,350);
 
@@ -268,6 +272,7 @@ function loop(){
 	walls.forEach((w)=>{
 		w.draw();
 	})
+	context.fillText(`Balls: ${balls.length}`,context.canvas.width-50,15);
 	window.requestAnimationFrame(loop);
 }
 window.requestAnimationFrame(loop);
