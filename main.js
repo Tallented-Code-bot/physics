@@ -236,15 +236,23 @@ let ball1=new Ball(100,100,25,5);
 let ball2=new Ball(200,200,50,50);
 let ball3=new Ball(300,300,10,2);
 let wall1=new Wall(400,100,450,350);
+let wall2=new Wall(200,100,150,350);
+
+let leftEdge=new Wall(0,0,0,context.canvas.height);
+let rightEdge=new Wall(context.canvas.width,0,context.canvas.width,context.canvas.height);
+let topEdge=new Wall(0,0,context.canvas.width,0);
+let bottomEdge=new Wall(0,context.canvas.height,context.canvas.width,context.canvas.height);
 function loop(){
 	context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
 	ball1.keyControl();
 	balls.forEach((b,index)=>{
 		b.move();
-		if(areBallAndWallColliding(b,wall1)){
-			resolvePenetrationForBallAndWall(b,wall1);
-			resolveCollisionForBallAndWall(b,wall1);
-		}
+		walls.forEach((w)=>{
+			if(areBallAndWallColliding(balls[index],w)){
+				resolvePenetrationForBallAndWall(balls[index],w);
+				resolveCollisionForBallAndWall(balls[index],w);
+			}
+		})
 		for(let i=index+1;i<balls.length;i++){
 			if(are2BallsColliding(balls[index],balls[i])){
 				resolvePenetrationFor2Balls(balls[index],balls[i]);
