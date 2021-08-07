@@ -76,6 +76,16 @@ Vector.prototype.normal=function(){
 	).unit();
 }
 
+
+Vector.prototype.draw=function(startX,startY,n,color){
+	context.beginPath();
+	context.moveTo(startX,startY);
+	context.lineTo(startX+this.x*n,startY+this.y*n);
+	context.strokeStyle=color;
+	context.stroke();
+	context.closePath();
+}
+
 /**
  * Gets the dot product of two vectors.
  * @param {Vector} vector1 The 1st vector to multiply
