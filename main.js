@@ -115,6 +115,28 @@ function resolveCollisionFor2Balls(b1,b2){
 	b2.velocity=b2.velocity.add(impulseVector.mult(-b2.inverseMass));
 }
 
+
+/**
+ * Generates the rotation matrix for a given angle
+ * @param {number} angle The angle to rotate to
+ * @returns The rotation matrix
+ */
+function rotationMatrix(angle){
+	/*
+	The rotation matrix is a 2x2 matrix that looks like this:
+	[cos(angle),-sin(angle)]
+	[sin(angle),cos(angle)]
+
+	It is used to rotate vectors
+	*/
+	let matrix=new Matrix(2,2);
+	matrix.data[0][0]=Math.cos(angle);
+	matrix.data[0][1]=-Math.sin(angle);
+	matrix.data[1][0]=Math.sin(angle);
+	matrix.data[1][1]=Math.cos(angle);
+	return matrix;
+}
+
 window.addEventListener("keydown",function(event){//listen for keys being pressed
 	event.preventDefault();//prevent the browser from scrolling
 	//set the direction variables based on keypresses
