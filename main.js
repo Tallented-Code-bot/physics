@@ -121,7 +121,12 @@ function closestPoint(b1,w1){
 	return w1.start.sub(closestVector);
 }
 
-
+/**
+ * Checks if a ball and a wall are colliding
+ * @param {Ball} b The ball to check
+ * @param {Wall} w The wall to check
+ * @returns Boolean
+ */
 function areBallAndWallColliding(b,w){
 	let ballToClosest=closestPoint(b,w).sub(b.position);
 	if(ballToClosest.mag()<=b.radius){
@@ -130,13 +135,22 @@ function areBallAndWallColliding(b,w){
 	return false
 }
 
-
+/**
+ * Moves the ball so it is not penetrating the wall
+ * @param {Ball} b The ball to move
+ * @param {Wall} w The wall to check
+ */
 function resolvePenetrationForBallAndWall(b,w){
 	let penetrationVector=b.position.sub(closestPoint(b,w));
 	b.position=b.position.add(penetrationVector.unit().mult(b.radius-penetrationVector.mag()));
 }
 
-
+/**
+ * `Checks if two balls are colliding
+ * @param {Ball} b1 ball 1
+ * @param {Ball} b2 ball 2
+ * @returns Boolean 
+ */
 function are2BallsColliding(b1,b2){
 	if(b1.radius+b2.radius>=b2.position.sub(b1.position).mag()){
 		//if the distance between the balls is smaller than the sum of the radii, they are colliding
@@ -145,7 +159,11 @@ function are2BallsColliding(b1,b2){
 	return false;
 }
 
-
+/**
+ * Moves the two balls out of each other
+ * @param {Ball} b1 ball 1
+ * @param {Ball} b2 ball 2
+ */
 function resolvePenetrationFor2Balls(b1,b2){
 	let distance=b1.position.sub(b2.position);
 	let penetration_depth=b1.radius+b2.radius-distance.mag();
@@ -155,7 +173,12 @@ function resolvePenetrationFor2Balls(b1,b2){
 }
 
 
-
+/**
+ * Resolves a collision between two balls, giving each
+ * of them new velocities
+ * @param {Ball} b1 ball 1
+ * @param {Ball} b2 ball 2
+ */
 function resolveCollisionFor2Balls(b1,b2){
 	let normal=b1.position.sub(b2.position).unit();
 	let relativeVelocity=b1.velocity.sub(b2.velocity);
