@@ -92,6 +92,19 @@ function closestPoint(b1,w1){
 }
 
 
+function areBallAndWallColliding(b,w){
+	let ballToClosest=closestPoint(b,w).sub(b.position);
+	if(ballToClosest.mag()<=b.radius){
+		return true;
+	}
+	return false
+}
+
+
+function resolvePenetrationForBallAndWall(b,w){
+	let penetrationVector=b.position.sub(closestPoint(b,w));
+	b.position=b.position.add(penetrationVector.unit().mult(b.radius-penetrationVector.mag()));
+}
 
 
 function are2BallsColliding(b1,b2){
@@ -153,27 +166,28 @@ window.addEventListener("keyup",function(event){//listen for keys being released
 })
 
 let ball1=new Ball(100,100,25,5);
-// let ball2=new Ball(200,200,50,50);
-// let ball3=new Ball(300,300,10,2);
+let ball2=new Ball(200,200,50,50);
+let ball3=new Ball(300,300,10,2);
 let wall1=new Wall(400,100,450,350);
 function loop(){
 	context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
 	ball1.keyControl();
-	ball1.draw();
 	balls.forEach((b,index)=>{
 		b.move();
-		b.draw();
+		if(areBallAndWallColliding(b,wall1)){
+			resolvePenetrationForBallAndWall(b,wall1);
+		}
 		for(let i=index+1;i<balls.length;i++){
 			if(are2BallsColliding(balls[index],balls[i])){
 				resolvePenetrationFor2Balls(balls[index],balls[i]);
 				resolveCollisionFor2Balls(balls[index],balls[i]);
 			}
 		}	
+		b.draw();
 	})
 	walls.forEach((w)=>{
 		w.draw();
 	})
-	closestPoint(ball1,wall1).sub(ball1.position).draw(ball1.position.x,ball1.position.y,1,"red");
 	window.requestAnimationFrame(loop);
 }
 window.requestAnimationFrame(loop);
