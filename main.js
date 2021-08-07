@@ -6,7 +6,7 @@ const walls=[];
 
 let LEFT,RIGHT,UP,DOWN;
 
-let friction=0.1;
+let friction=0.05;
 let elasticity=1;
 
 function Ball(x,y,radius,mass){
@@ -59,6 +59,7 @@ Ball.prototype.move=function(){
 function Wall(x1,y1,x2,y2){
 	this.start=new Vector(x1,y1);
 	this.end=new Vector(x2,y2);
+	walls.push(this);
 }
 
 
@@ -69,6 +70,28 @@ Wall.prototype.draw=function(){
 	context.strokeStyle="black";
 	context.stroke();
 }
+
+
+Wall.prototype.wallUnit=function(){
+	return this.end.sub(this.start).unit();
+}
+
+
+function closestPoint(b1,w1){
+	let ballToWallStart=w1.start.sub(b1.position);
+	if(Vector.dot(w1.wallUnit(),ballToWallStart)>0){
+		return w1.start;
+	}
+	let wallEndToBall=b1.position.sub(w1.end);
+	if(Vector.dot(w1.wallUnit(),wallEndToBall)>0){
+		return w1.end;
+	}
+	let closestDistance=Vector.dot(w1.wallUnit(),ballToWallStart);
+	let closestVector=w1.wallUnit().mult(closestDistance);
+	return w1.start.sub(closestVector);
+}
+
+
 
 
 function are2BallsColliding(b1,b2){
@@ -130,8 +153,9 @@ window.addEventListener("keyup",function(event){//listen for keys being released
 })
 
 let ball1=new Ball(100,100,25,5);
-let ball2=new Ball(200,200,50,50);
-let ball3=new Ball(300,300,10,2);
+// let ball2=new Ball(200,200,50,50);
+// let ball3=new Ball(300,300,10,2);
+let wall1=new Wall(400,100,450,350);
 function loop(){
 	context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
 	ball1.keyControl();
@@ -146,9 +170,10 @@ function loop(){
 			}
 		}	
 	})
-	if(are2BallsColliding(ball1,ball2)){
-		resolvePenetrationFor2Balls(ball1,ball2);		
-	}	
+	walls.forEach((w)=>{
+		w.draw();
+	})
+	closestPoint(ball1,wall1).sub(ball1.position).draw(ball1.position.x,ball1.position.y,1,"red");
 	window.requestAnimationFrame(loop);
 }
 window.requestAnimationFrame(loop);
