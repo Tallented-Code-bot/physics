@@ -136,6 +136,20 @@ function areBallAndWallColliding(b,w){
 }
 
 /**
+ * Resolves a collision between a ball and a wall,
+ * giving the ball a new velocity.
+ * @param {Ball} b The ball to resolve
+ * @param {Wall} w The wall to resolve
+ */
+function resolveCollisionForBallAndWall(b,w){
+	let normal=b.position.sub(closestPoint(b,w)).unit();
+	let separatingVelocity=Vector.dot(b.velocity,normal);
+	let new_separatingVelocity=-separatingVelocity*elasticity;
+	let vseparatingDifference=separatingVelocity-new_separatingVelocity;
+	b.velocity=b.velocity.add(normal.mult(-vseparatingDifference));
+}
+
+/**
  * Moves the ball so it is not penetrating the wall
  * @param {Ball} b The ball to move
  * @param {Wall} w The wall to check
@@ -229,6 +243,7 @@ function loop(){
 		b.move();
 		if(areBallAndWallColliding(b,wall1)){
 			resolvePenetrationForBallAndWall(b,wall1);
+			resolveCollisionForBallAndWall(b,wall1);
 		}
 		for(let i=index+1;i<balls.length;i++){
 			if(are2BallsColliding(balls[index],balls[i])){
