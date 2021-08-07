@@ -162,12 +162,6 @@ window.addEventListener("keyup",function(event){//listen for keys being released
 	if(event.keyCode===83)DOWN=false;
 })
 
-canvas.addEventListener("click",function(event){
-	let rect=canvas.getBoundingClientRect();
-	let x=event.clientX-rect.left;
-	let y=event.clientY-rect.top;
-	new Ball(x,y,30,100);
-})
 
 
 
