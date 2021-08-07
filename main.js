@@ -137,10 +137,6 @@ function rotationMatrix(angle){
 }
 
 
-let ball1=new Ball(100,100,25,10);
-let ball2=new Ball(200,200,50,2);
-let wall1=new Wall(400,100,450,350);
-let wall2=new Wall(200,100,150,350);
 
 let leftEdge=new Wall(0,0,0,context.canvas.height);
 let rightEdge=new Wall(context.canvas.width,0,context.canvas.width,context.canvas.height);
