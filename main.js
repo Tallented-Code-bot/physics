@@ -2,6 +2,7 @@ const canvas=document.getElementById("canvas");//get the canvas element
 const context=canvas.getContext("2d");//get the canvas drawing context so that we can draw
 
 const balls=[];
+const walls=[];
 
 let LEFT,RIGHT,UP,DOWN;
 
@@ -51,6 +52,22 @@ Ball.prototype.move=function(){
 	this.velocity=this.velocity.mult(1-friction);
 	//set the position from the velocity
 	this.position=this.position.add(this.velocity);
+}
+
+
+
+function Wall(x1,y1,x2,y2){
+	this.start=new Vector(x1,y1);
+	this.end=new Vector(x2,y2);
+}
+
+
+Wall.prototype.draw=function(){
+	context.beginPath();
+	context.moveTo(this.start.x,this.start.y);
+	context.lineTo(this.end.x,this.end.y);
+	context.strokeStyle="black";
+	context.stroke();
 }
 
 
