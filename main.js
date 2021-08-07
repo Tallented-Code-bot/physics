@@ -9,6 +9,14 @@ let LEFT,RIGHT,UP,DOWN;
 let friction=0.05;
 let elasticity=1;
 
+
+/**
+ * A ball class
+ * @param {number} x The starting x position of the ball
+ * @param {number} y The starting y position of the ball
+ * @param {number} radius The radius of the ball
+ * @param {number} mass The mass of the ball
+ */
 function Ball(x,y,radius,mass){
 	this.position=new Vector(x,y);
 	this.velocity=new Vector(0,0);
@@ -23,7 +31,9 @@ function Ball(x,y,radius,mass){
 	balls.push(this);
 }
 
-
+/**
+ * Draws the ball onto the canvas
+ */
 Ball.prototype.draw=function(){
 	context.beginPath();
 	context.arc(this.position.x,this.position.y,this.radius,0,2*Math.PI);
@@ -33,7 +43,9 @@ Ball.prototype.draw=function(){
 	context.fill();
 }
 
-
+/**
+ * Moves the ball according to the global keyboard variables
+ */
 Ball.prototype.keyControl=function(){//if the arrow keys are pressed
 	//set the value of the acceleration
 	if(LEFT)this.acceleration.x=-1;
@@ -43,7 +55,9 @@ Ball.prototype.keyControl=function(){//if the arrow keys are pressed
 	if(!UP&&!DOWN)this.acceleration.y=0;
 	if(!LEFT&&!RIGHT)this.acceleration.x=0;
 }
-
+/**
+ * Applies acceleration and velocity to move the ball
+ */
 Ball.prototype.move=function(){
 	this.acceleration=this.acceleration.unit();//set the acceleration to have a magnitude of 1
 	//set the velocity from the acceleration
@@ -55,14 +69,22 @@ Ball.prototype.move=function(){
 }
 
 
-
-function Wall(x1,y1,x2,y2){
-	this.start=new Vector(x1,y1);
-	this.end=new Vector(x2,y2);
+/**
+ * A basic wall class
+ * @param {number} startX The x position of the start of the wal
+ * @param {number} startY The y position of the start of the wall
+ * @param {number} endX The x position of the end of the wall
+ * @param {number} endY The y position of the end of the wall
+ */
+function Wall(startX,startY,endX,endY){
+	this.start=new Vector(startX,startY);
+	this.end=new Vector(endX,endY);
 	walls.push(this);
 }
 
-
+/**
+ * Draws the wall to the canvas
+ */
 Wall.prototype.draw=function(){
 	context.beginPath();
 	context.moveTo(this.start.x,this.start.y);
@@ -71,12 +93,20 @@ Wall.prototype.draw=function(){
 	context.stroke();
 }
 
-
+/**
+ * Gets the unit vector of the wall
+ * @returns The wall vector as a unit vector
+ */
 Wall.prototype.wallUnit=function(){
 	return this.end.sub(this.start).unit();
 }
 
-
+/**
+ * Finds the closest point of the wall relative to the ball 
+ * @param {Ball} b1 The ball
+ * @param {Wall} w1 The wall
+ * @returns The closest point of the wall to the ball 
+ */
 function closestPoint(b1,w1){
 	let ballToWallStart=w1.start.sub(b1.position);
 	if(Vector.dot(w1.wallUnit(),ballToWallStart)>0){
