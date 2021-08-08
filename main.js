@@ -38,6 +38,20 @@ new Ball(footSpot.x+8*ballRadius,footSpot.y-ballRadius*4,ballRadius,ballMass,"re
 let friction=0.05;
 let elasticity=1;
 
+
+/**
+ * Checks if the mouse is inside a ball
+ * @param {Ball} ball The ball to check
+ * @param {Vector} mouse The mouse vector
+ * @returns Boolean
+ */
+function isMouseInBall(ball,mouse){
+	if(ball.position.sub(mouse).mag()<ball.radius){
+		return true;
+	}	
+	return false
+}
+
 /**
  * Finds the closest point of the wall relative to the ball 
  * @param {Ball} b1 The ball
@@ -167,6 +181,14 @@ function rotationMatrix(angle){
 }
 
 
+canvas.addEventListener("click",(event)=>{
+	isMouseInBall(cue,getMousePosition(event));
+})
+
+function getMousePosition(event){
+	let rect=canvas.getBoundingClientRect();
+	return new Vector(event.clientX-rect.left,event.clientY-rect.top);	
+}
 
 let leftEdge=new Wall(0,0,0,context.canvas.height);
 let rightEdge=new Wall(context.canvas.width,0,context.canvas.width,context.canvas.height);
