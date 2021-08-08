@@ -16,6 +16,10 @@ const ballMass=20;
 const balls=[];
 const walls=[];
 
+let mouseDown=false;
+let mouse=new Vector(0,0);
+let shooting=false;
+
 let cue=new Ball(headSpot.x,headSpot.y,ballRadius,ballMass,"white");//the cue ball
 new Ball(footSpot.x,footSpot.y,ballRadius,ballMass,"yellow");
 new Ball(footSpot.x+2*ballRadius,footSpot.y-ballRadius-2,ballRadius,ballMass,"yellow");
@@ -181,9 +185,31 @@ function rotationMatrix(angle){
 }
 
 
-canvas.addEventListener("click",(event)=>{
-	isMouseInBall(cue,getMousePosition(event));
+function drawStick(){
+	let toDraw=cue.position.add(cue.position.sub(mouse));
+	context.beginPath()
+	context.moveTo(cue.position.x,cue.position.y);
+	context.lineTo(toDraw.x,toDraw.y);
+	context.strokeStyle="black";
+	context.stroke();
+}
+
+window.addEventListener("mousedown",(event)=>{
+	mouseDown=true;
 })
+
+window.addEventListener("mouseup",(event)=>{
+	mouseDown=false;
+});
+
+
+
+window.addEventListener("mousemove",(event)=>{
+	mouse=getMousePosition(event);
+})
+
+
+
 
 function getMousePosition(event){
 	let rect=canvas.getBoundingClientRect();
@@ -196,6 +222,19 @@ let topEdge=new Wall(0,0,context.canvas.width,0);
 let bottomEdge=new Wall(0,context.canvas.height,context.canvas.width,context.canvas.height);
 function loop(){
 	context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
+	//we are not already shooting
+	//and the mouse is down
+	//and the mouse is inside of the ball
+	if(!shooting&&mouseDown&&isMouseInBall(cue,mouse)&&Math.abs(cue.velocity.mag())<1){
+		shooting=true;//set shooting mode when the ball is clicked	
+	}
+	if(shooting&&!mouseDown){
+		shooting=false;//we are finished shooting
+		cue.velocity=cue.position.sub(mouse).mult(0.5);//set the ball velocity
+	}
+	if(shooting){//if it is in shooting mode
+		drawStick();//draw the stick
+	}
 	balls.forEach((b,index)=>{
 		b.move();
 		walls.forEach((w)=>{
@@ -211,6 +250,7 @@ function loop(){
 			}
 		}	
 		b.draw();
+		
 	})
 	walls.forEach((w)=>{
 		w.draw();
