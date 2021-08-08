@@ -2,15 +2,16 @@ const canvas=document.getElementById("canvas");//get the canvas element
 const context=canvas.getContext("2d");//get the canvas drawing context so that we can draw
 
 //the pool table has a 2:1 ratio
-canvas.width=700;
-canvas.height=350
+canvas.width=window.innerWidth-10;
+canvas.height=canvas.width/2
+console.log(window.innerWidth);
 
 const headString=canvas.width/4;//the headstring is the 1st quarter of the board
 const headSpot=new Vector(headString,canvas.height/2);
 
 const footString=canvas.width-canvas.width/4;
 const footSpot=new Vector(footString,canvas.height/2);
-const ballRadius=15;
+const ballRadius=canvas.width/90;
 const ballMass=20;
 
 const balls=[];
@@ -39,7 +40,7 @@ new Ball(footSpot.x+8*ballRadius,footSpot.y-ballRadius*2,ballRadius,ballMass,"re
 new Ball(footSpot.x+8*ballRadius,footSpot.y-ballRadius*4,ballRadius,ballMass,"red");
 
 
-let friction=0.05;
+let friction=0.02;
 let elasticity=1;
 
 
@@ -230,7 +231,7 @@ function loop(){
 	}
 	if(shooting&&!mouseDown){
 		shooting=false;//we are finished shooting
-		cue.velocity=cue.position.sub(mouse).mult(0.5);//set the ball velocity
+		cue.velocity=cue.position.sub(mouse).mult(0.2);//set the ball velocity
 	}
 	if(shooting){//if it is in shooting mode
 		drawStick();//draw the stick
