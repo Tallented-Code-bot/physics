@@ -115,6 +115,31 @@ function resolvePenetrationForBallAndWall(b,w){
 	b.position=b.position.add(penetrationVector.unit().mult(b.radius-penetrationVector.mag()));
 }
 
+function keepBallInside(b){
+	//the ball is to the left of the left side of the canvas
+	if(b.position.x-b.radius<0){
+		b.position.x=b.radius;//push the ball out of the edge
+		b.velocity.x=b.velocity.x*-1;//reverse the x velocity
+	}
+	//the ball is to the right of the right side of the canvas
+	if(b.position.x+b.radius>canvas.width){
+		b.position.x=canvas.width-b.radius//push the ball out of the edge
+		b.velocity.x=b.velocity.x*-1;//reverse the x velocity
+	}
+	//the ball is above the top of the canvas
+	if(b.position.y-b.radius<0){
+		b.position.y=b.radius;//push the ball out of the edge
+		b.velocity.y=b.velocity.y*-1;
+	}
+	//the ball is below the bottom of the canvas
+	if(b.position.y+b.radius>canvas.height){
+		b.position.y=canvas.height-b.radius;//push the ball out of the edge
+		b.velocity.y=b.velocity.y*-1;
+	}
+}
+
+
+
 /**
  * `Checks if two balls are colliding
  * @param {Ball} b1 ball 1
@@ -217,10 +242,6 @@ function getMousePosition(event){
 	return new Vector(event.clientX-rect.left,event.clientY-rect.top);	
 }
 
-let leftEdge=new Wall(0,0,0,context.canvas.height);
-let rightEdge=new Wall(context.canvas.width,0,context.canvas.width,context.canvas.height);
-let topEdge=new Wall(0,0,context.canvas.width,0);
-let bottomEdge=new Wall(0,context.canvas.height,context.canvas.width,context.canvas.height);
 function loop(){
 	context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
 	//we are not already shooting
@@ -238,12 +259,7 @@ function loop(){
 	}
 	balls.forEach((b,index)=>{
 		b.move();
-		walls.forEach((w)=>{
-			if(areBallAndWallColliding(balls[index],w)){
-				resolvePenetrationForBallAndWall(balls[index],w);
-				resolveCollisionForBallAndWall(balls[index],w);
-			}
-		})
+		keepBallInside(b);
 		for(let i=index+1;i<balls.length;i++){
 			if(are2BallsColliding(balls[index],balls[i])){
 				resolvePenetrationFor2Balls(balls[index],balls[i]);
