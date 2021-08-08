@@ -1,8 +1,38 @@
 const canvas=document.getElementById("canvas");//get the canvas element
 const context=canvas.getContext("2d");//get the canvas drawing context so that we can draw
 
+//the pool table has a 2:1 ratio
+canvas.width=700;
+canvas.height=350
+
+const headString=canvas.width/4;//the headstring is the 1st quarter of the board
+const headSpot=new Vector(headString,canvas.height/2);
+
+const footString=canvas.width-canvas.width/4;
+const footSpot=new Vector(footString,canvas.height/2);
+const ballRadius=15;
+const ballMass=20;
+
 const balls=[];
 const walls=[];
+
+let cue=new Ball(headSpot.x,headSpot.y,ballRadius,ballMass,"white");//the cue ball
+new Ball(footSpot.x,footSpot.y,ballRadius,ballMass,"yellow");
+new Ball(footSpot.x+2*ballRadius,footSpot.y-ballRadius-2,ballRadius,ballMass,"yellow");
+new Ball(footSpot.x+2*ballRadius,footSpot.y+ballRadius+2,ballRadius,ballMass,"red");
+new Ball(footSpot.x+4*ballRadius,footSpot.y+ballRadius*2+2,ballRadius,ballMass,"yellow");
+new Ball(footSpot.x+4*ballRadius,footSpot.y,ballRadius,ballMass,"black");
+new Ball(footSpot.x+4*ballRadius,footSpot.y-ballRadius*2,ballRadius,ballMass,"red");
+new Ball(footSpot.x+6*ballRadius,footSpot.y-ballRadius*3,ballRadius,ballMass,"yellow");
+new Ball(footSpot.x+6*ballRadius,footSpot.y-ballRadius*1,ballRadius,ballMass,"red");
+new Ball(footSpot.x+6*ballRadius,footSpot.y+ballRadius*1,ballRadius,ballMass,"yellow");
+new Ball(footSpot.x+6*ballRadius,footSpot.y+ballRadius*3,ballRadius,ballMass,"red");
+
+new Ball(footSpot.x+8*ballRadius,footSpot.y,ballRadius,ballMass,"yellow");
+new Ball(footSpot.x+8*ballRadius,footSpot.y+ballRadius*2,ballRadius,ballMass,"red");
+new Ball(footSpot.x+8*ballRadius,footSpot.y+ballRadius*4,ballRadius,ballMass,"yellow");
+new Ball(footSpot.x+8*ballRadius,footSpot.y-ballRadius*2,ballRadius,ballMass,"red");
+new Ball(footSpot.x+8*ballRadius,footSpot.y-ballRadius*4,ballRadius,ballMass,"red");
 
 
 let friction=0.05;
