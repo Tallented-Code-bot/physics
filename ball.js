@@ -5,12 +5,13 @@
  * @param {number} radius The radius of the ball
  * @param {number} mass The mass of the ball
  */
-function Ball(x,y,radius,mass){
+function Ball(x,y,radius,mass,color){
 	this.position=new Vector(x,y);
 	this.velocity=new Vector(0,0);
 	this.acceleration=new Vector(0,0);
 	this.radius=radius;
 	this.mass=mass;
+	this.color=color;
 	if(mass===0){
 		this.inverseMass=0;
 	}else{
@@ -26,7 +27,7 @@ Ball.prototype.draw=function(){
 	context.beginPath();
 	context.arc(this.position.x,this.position.y,this.radius,0,2*Math.PI);
 	context.strokeStyle="black";
-	context.fillStyle="red";
+	context.fillStyle=this.color;
 	context.stroke();
 	context.fill();
 }
