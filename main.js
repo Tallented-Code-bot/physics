@@ -2,9 +2,14 @@ const canvas=document.getElementById("canvas");//get the canvas element
 const context=canvas.getContext("2d");//get the canvas drawing context so that we can draw
 
 //the pool table has a 2:1 ratio
-canvas.width=window.innerWidth-10;
+canvas.width=window.innerWidth;
 canvas.height=canvas.width/2
-console.log(window.innerWidth);
+
+let width=canvas.width;
+let height=canvas.height;
+let wallWidth=(width/90)*4
+width-=wallWidth*2;
+height=canvas.height-wallWidth*2
 
 const headString=canvas.width/4;//the headstring is the 1st quarter of the board
 const headSpot=new Vector(headString,canvas.height/2);
@@ -16,6 +21,7 @@ const ballMass=20;
 
 const balls=[];
 const walls=[];
+const pockets=[];
 
 let mouseDown=false;
 let mouse=new Vector(0,0);
@@ -38,6 +44,28 @@ new Ball(footSpot.x+8*ballRadius,footSpot.y+ballRadius*2,ballRadius,ballMass,"re
 new Ball(footSpot.x+8*ballRadius,footSpot.y+ballRadius*4,ballRadius,ballMass,"yellow");
 new Ball(footSpot.x+8*ballRadius,footSpot.y-ballRadius*2,ballRadius,ballMass,"red");
 new Ball(footSpot.x+8*ballRadius,footSpot.y-ballRadius*4,ballRadius,ballMass,"red");
+
+
+
+
+//create the pockets
+pockets.push(new Ball(wallWidth,wallWidth,wallWidth/2,0,"black"))
+balls.pop(balls.length-1);//remove the pocket from the balls list
+
+pockets.push(new Ball(width+wallWidth,wallWidth,wallWidth/2,0,"black"));
+balls.pop(balls.length-1);
+
+pockets.push(new Ball(wallWidth,height+wallWidth,wallWidth/2,0,"black"));
+balls.pop(balls.length-1);
+
+pockets.push(new Ball(width+wallWidth,height+wallWidth,wallWidth/2,0,"black"));
+balls.pop(balls.length-1);
+
+pockets.push(new Ball(width/2+wallWidth,wallWidth,wallWidth/2,0,"black"));
+balls.pop(balls.length-1);
+
+pockets.push(new Ball(width/2+wallWidth,height+wallWidth,wallWidth/2,0,"black"));
+balls.pop(balls.length-1);
 
 
 let friction=0.02;
@@ -117,23 +145,23 @@ function resolvePenetrationForBallAndWall(b,w){
 
 function keepBallInside(b){
 	//the ball is to the left of the left side of the canvas
-	if(b.position.x-b.radius<0){
-		b.position.x=b.radius;//push the ball out of the edge
+	if(b.position.x-b.radius<wallWidth){
+		b.position.x=b.radius+wallWidth;//push the ball out of the edge
 		b.velocity.x=b.velocity.x*-1;//reverse the x velocity
 	}
 	//the ball is to the right of the right side of the canvas
-	if(b.position.x+b.radius>canvas.width){
-		b.position.x=canvas.width-b.radius//push the ball out of the edge
+	if(b.position.x+b.radius>width+wallWidth){
+		b.position.x=wallWidth+width-b.radius//push the ball out of the edge
 		b.velocity.x=b.velocity.x*-1;//reverse the x velocity
 	}
 	//the ball is above the top of the canvas
-	if(b.position.y-b.radius<0){
-		b.position.y=b.radius;//push the ball out of the edge
+	if(b.position.y-b.radius<wallWidth){
+		b.position.y=b.radius+wallWidth;//push the ball out of the edge
 		b.velocity.y=b.velocity.y*-1;
 	}
 	//the ball is below the bottom of the canvas
-	if(b.position.y+b.radius>canvas.height){
-		b.position.y=canvas.height-b.radius;//push the ball out of the edge
+	if(b.position.y+b.radius>height+wallWidth){
+		b.position.y=wallWidth+height-b.radius;//push the ball out of the edge
 		b.velocity.y=b.velocity.y*-1;
 	}
 }
@@ -243,7 +271,11 @@ function getMousePosition(event){
 }
 
 function loop(){
-	context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
+	// context.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
+	context.fillStyle="#632D00";
+	context.fillRect(0,0,canvas.width,canvas.height);
+	context.fillStyle="#037b09";
+	context.fillRect(wallWidth,wallWidth,width,height);
 	//we are not already shooting
 	//and the mouse is down
 	//and the mouse is inside of the ball
@@ -257,6 +289,9 @@ function loop(){
 	if(shooting){//if it is in shooting mode
 		drawStick();//draw the stick
 	}
+	pockets.forEach((p)=>{
+		p.draw();
+	})
 	balls.forEach((b,index)=>{
 		b.move();
 		keepBallInside(b);
@@ -272,7 +307,7 @@ function loop(){
 	walls.forEach((w)=>{
 		w.draw();
 	})
-	context.fillText(`Balls: ${balls.length}`,context.canvas.width-50,15);
+	
 	window.requestAnimationFrame(loop);
 }
 window.requestAnimationFrame(loop);
