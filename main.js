@@ -5,6 +5,22 @@ const context=canvas.getContext("2d");//get the canvas drawing context so that w
 let form=document.getElementById("main_form");
 let radiusInput=document.getElementById("radius_input");
 let massInput=document.getElementById("mass_input");
+let ballSection=document.getElementById("ball_section");
+let wallSection=document.getElementById("wall_section");
+let selection=document.getElementById("selection");
+
+form.addEventListener("input",(event)=>{
+	if(selection.value==="Ball"){
+		ballSection.style.display="block";
+	}else{
+		ballSection.style.display="none";
+	}
+	if(selection.value==="Wall"){
+		wallSection.style.display="block";
+	}else{
+		wallSection.style.display="none";
+	}
+})
 
 const balls=[];
 const walls=[];
