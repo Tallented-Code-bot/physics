@@ -1,6 +1,11 @@
 const canvas=document.getElementById("canvas");//get the canvas element
 const context=canvas.getContext("2d");//get the canvas drawing context so that we can draw
 
+
+let form=document.getElementById("main_form");
+let radiusInput=document.getElementById("radius_input");
+let massInput=document.getElementById("mass_input");
+
 const balls=[];
 const walls=[];
 
@@ -166,7 +171,12 @@ canvas.addEventListener("click",function(event){
 	let rect=canvas.getBoundingClientRect();
 	let x=event.clientX-rect.left;
 	let y=event.clientY-rect.top;
-	new Ball(x,y,30,100);
+	let mass=massInput.value;
+	let radius=radiusInput.value;
+	radius=Number(radius);
+	mass=Number(mass);
+	new Ball(x,y,radius,mass);
+	
 })
 
 
